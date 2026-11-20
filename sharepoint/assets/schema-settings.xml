@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<List xmlns:ows="Microsoft SharePoint" Title="AdventSettings" EnableContentTypes="TRUE" FolderCreation="FALSE"
+      Direction="$Resources:Direction;" Url="Lists/AdventSettings" BaseType="0"
+      xmlns="http://schemas.microsoft.com/sharepoint/">
+  <MetaData>
+    <ContentTypes>
+      <ContentTypeRef ID="0x010017A55F55D6EF4ED0A8E8D81522F1B27B" />
+    </ContentTypes>
+    <Fields></Fields>
+    <Views>
+      <View BaseViewID="1" Type="HTML" WebPartZoneID="Main" DisplayName="$Resources:core,objectiv_schema_mwsidcamlidC24;"
+            DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" SetupPath="pages\viewpage.aspx"
+            ImageUrl="/_layouts/images/generic.png" Url="AllItems.aspx">
+        <XslLink Default="TRUE">main.xsl</XslLink>
+        <JSLink>clienttemplates.js</JSLink>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <Toolbar Type="Standard" />
+        <ViewFields>
+          <FieldRef Name="LinkTitle" />
+          <FieldRef Name="AdvIsActive" />
+          <FieldRef Name="AdvHeaderTitle" />
+          <FieldRef Name="AdvPrimaryColor" />
+          <FieldRef Name="AdvSecondaryColor" />
+          <FieldRef Name="AdvAccentColor" />
+          <FieldRef Name="AdvBackgroundColor" />
+          <FieldRef Name="AdvTextColor" />
+          <FieldRef Name="AdvLockedColor" />
+          <FieldRef Name="AdvFontFamily" />
+          <FieldRef Name="AdvSnowEffect" />
+          <FieldRef Name="AdvSceneStyle" />
+          <FieldRef Name="AdvTreeColor" />
+          <FieldRef Name="AdvBaubleColors" />
+        </ViewFields>
+        <Query>
+          <OrderBy>
+            <FieldRef Name="Title" />
+          </OrderBy>
+        </Query>
+      </View>
+    </Views>
+    <Forms>
+      <Form Type="DisplayForm" Url="DispForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="EditForm" Url="EditForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+      <Form Type="NewForm" Url="NewForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />
+    </Forms>
+  </MetaData>
+</List>

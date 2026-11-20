@@ -1,0 +1,23 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "whichFolder": "subdir",
+    "solutionName": "advent-calendar",
+    "environment": "spo",
+    "packageManager": "npm",
+    "useGulp": false,
+    "componentType": "webpart",
+    "template": "react",
+    "componentName": "AdventCalendar",
+    "componentDescription": "Calendrier de l'Avent",
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.23.1",
+    "sdksVersions": {},
+    "version": "1.23.2",
+    "libraryName": "advent-calendar",
+    "libraryId": "2a830857-f417-40cc-9049-724e66160693",
+    "solutionShortDescription": "advent-calendar description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false
+  }
+}

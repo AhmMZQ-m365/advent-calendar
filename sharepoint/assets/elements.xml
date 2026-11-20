@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Provisionnement des listes du Calendrier de l'Avent (Feature Framework).
+  Les définitions de colonnes doivent rester alignées avec
+  src/webparts/adventCalendar/models/listDefinitions.ts (utilisé par ProvisioningService).
+-->
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+
+  <!-- ===================== Colonnes : Publications ===================== -->
+  <Field ID="{8633a4f3-2c31-41b8-a43e-bb1dcfb62097}" Name="AdvDay" StaticName="AdvDay" DisplayName="Jour"
+         Type="Number" Decimals="0" Min="1" Max="24" Required="TRUE" Indexed="TRUE"
+         Group="Calendrier de l'Avent" />
+  <Field ID="{5c5977da-421c-490e-8e16-f2af618cf84f}" Name="AdvUnlockDate" StaticName="AdvUnlockDate" DisplayName="Date d'ouverture"
+         Type="DateTime" Format="DateTime" Group="Calendrier de l'Avent" />
+  <Field ID="{e7404c88-ade5-4950-8831-5768ea24d39f}" Name="AdvImage" StaticName="AdvImage" DisplayName="Image"
+         Type="URL" Format="Image" Group="Calendrier de l'Avent" />
+  <Field ID="{686ceb85-b876-40fb-8b26-18e097fdcf7e}" Name="AdvBody" StaticName="AdvBody" DisplayName="Contenu"
+         Type="Note" RichText="TRUE" RichTextMode="FullHtml" IsolateStyles="TRUE" NumLines="12"
+         Group="Calendrier de l'Avent" />
+  <Field ID="{07ddae80-11d4-43b7-aedb-debcef3fc746}" Name="AdvLink" StaticName="AdvLink" DisplayName="En savoir plus"
+         Type="URL" Format="Hyperlink" Group="Calendrier de l'Avent" />
+  <Field ID="{31300343-b54e-4bb6-8aad-6410ce77079a}" Name="AdvYear" StaticName="AdvYear" DisplayName="Édition (année)"
+         Type="Number" Decimals="0" Min="2000" Max="2100" Indexed="TRUE" Group="Calendrier de l'Avent" />
+  <Field ID="{24836c7b-4bcf-4446-a8c1-73d93cf4f5bc}" Name="AdvPublished" StaticName="AdvPublished" DisplayName="Publié"
+         Type="Boolean" Group="Calendrier de l'Avent">
+    <Default>0</Default>
+  </Field>
+  <Field ID="{a75ab3f6-e85b-4e78-90b7-4ad3633f89f0}" Name="AdvKey" StaticName="AdvKey" DisplayName="Clé technique (année-jour)"
+         Type="Text" MaxLength="16" Indexed="TRUE" EnforceUniqueValues="TRUE" Group="Calendrier de l'Avent" />
+
+  <!-- ===================== Colonnes : Paramétrage ===================== -->
+  <Field ID="{5be2deb8-5a86-429a-8e48-cd5493c492ba}" Name="AdvIsActive" StaticName="AdvIsActive" DisplayName="Profil actif"
+         Type="Boolean" Group="Calendrier de l'Avent">
+    <Default>0</Default>
+  </Field>
+  <Field ID="{7b5818bc-9275-4c1c-bf78-f19a53d9f59f}" Name="AdvPrimaryColor" StaticName="AdvPrimaryColor" DisplayName="Couleur principale"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{cd94395d-a266-4f91-a8c8-4211af39aed1}" Name="AdvSecondaryColor" StaticName="AdvSecondaryColor" DisplayName="Couleur secondaire"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{4f1d7785-577d-41c4-a80e-5aa196c5571d}" Name="AdvAccentColor" StaticName="AdvAccentColor" DisplayName="Couleur d'accent"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{82508ac4-2fde-4d23-ac7b-da5ebd8aa99c}" Name="AdvBackgroundColor" StaticName="AdvBackgroundColor" DisplayName="Couleur de fond"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{de0f5de7-3d70-4389-b06e-b94660bba9d0}" Name="AdvTextColor" StaticName="AdvTextColor" DisplayName="Couleur du texte"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{c21504e4-0807-4ab4-8c40-6ec58c91c443}" Name="AdvLockedColor" StaticName="AdvLockedColor" DisplayName="Couleur des cases verrouillées"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{026fd3f3-f178-45a9-b73a-eb8d720fb7c0}" Name="AdvFontFamily" StaticName="AdvFontFamily" DisplayName="Police"
+         Type="Text" MaxLength="255" Group="Calendrier de l'Avent" />
+  <Field ID="{b8ab86f6-3bd2-4fa9-94e7-25d3435b322f}" Name="AdvFontUrl" StaticName="AdvFontUrl" DisplayName="URL de la feuille de police"
+         Type="URL" Format="Hyperlink" Group="Calendrier de l'Avent" />
+  <Field ID="{9111625a-63c9-4899-b59d-7b9bee269cf8}" Name="AdvLogo" StaticName="AdvLogo" DisplayName="Logo"
+         Type="URL" Format="Image" Group="Calendrier de l'Avent" />
+  <Field ID="{41e62baa-664e-48cb-8bf9-97fddd27a2bb}" Name="AdvHeaderTitle" StaticName="AdvHeaderTitle" DisplayName="Titre affiché"
+         Type="Text" MaxLength="255" Group="Calendrier de l'Avent" />
+  <Field ID="{3e6365ea-f1e0-4985-8f5a-97a7d221087b}" Name="AdvBorderRadius" StaticName="AdvBorderRadius" DisplayName="Arrondi des cases (px)"
+         Type="Number" Decimals="0" Min="0" Max="32" Group="Calendrier de l'Avent">
+    <Default>8</Default>
+  </Field>
+  <Field ID="{21b7b9b9-72a6-4673-8143-149d3d14db15}" Name="AdvSnowEffect" StaticName="AdvSnowEffect" DisplayName="Effet neige"
+         Type="Boolean" Group="Calendrier de l'Avent">
+    <Default>0</Default>
+  </Field>
+  <!-- Réglages du sapin (2.0). Sur un site déjà provisionné, ProvisioningService les ajoute au chargement.
+       AdvBaubleColors : « #RRGGBB,#RRGGBB,… » (3 à 6) ; AdvSceneStyle : day | snow | night. -->
+  <Field ID="{4b9e1c7a-2f53-4d86-a1e0-7c3d95b8f204}" Name="AdvTreeColor" StaticName="AdvTreeColor" DisplayName="Feuillage du sapin"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{a1d70f3e-68c2-49b5-8e17-0b5c2d94e6f1}" Name="AdvBaubleColors" StaticName="AdvBaubleColors" DisplayName="Couleurs des boules"
+         Type="Text" MaxLength="64" Group="Calendrier de l'Avent" />
+  <Field ID="{e63b8d52-1a97-4c40-b2f8-95d1073ac6e8}" Name="AdvStarColor" StaticName="AdvStarColor" DisplayName="Couleur étoile et guirlande"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{2c84f9a0-b5d7-4e13-96a2-d8e04f7b1c35}" Name="AdvSceneBackground" StaticName="AdvSceneBackground" DisplayName="Fond de scène du sapin"
+         Type="Text" MaxLength="7" Group="Calendrier de l'Avent" />
+  <Field ID="{7f20c5b9-3e8a-41d6-a7b4-1d69e2f08c53}" Name="AdvSceneStyle" StaticName="AdvSceneStyle" DisplayName="Décor du sapin"
+         Type="Text" MaxLength="16" Group="Calendrier de l'Avent" />
+  <Field ID="{d9a5e418-0c3f-47b2-85e6-3a7f1b9d4c20}" Name="AdvGarlandLights" StaticName="AdvGarlandLights" DisplayName="Guirlande lumineuse"
+         Type="Boolean" Group="Calendrier de l'Avent">
+    <Default>1</Default>
+  </Field>
+
+  <!-- ===================== Colonnes : Administrateurs ===================== -->
+  <Field ID="{eb135daa-8d28-42c2-a19c-72602eefd0bb}" Name="AdvAdminUser" StaticName="AdvAdminUser" DisplayName="Administrateur"
+         Type="User" List="UserInfo" ShowField="ImnName" UserSelectionMode="PeopleOnly" UserSelectionScope="0"
+         Mult="FALSE" Required="TRUE" Group="Calendrier de l'Avent" />
+
+  <!-- ===================== Colonnes : Consultations ===================== -->
+  <!-- Une ligne par utilisateur et par édition : utilisateur = « Créé par » (Author), édition = AdvYear (colonne partagée). -->
+  <Field ID="{f5872e0e-0cf6-447d-bc38-dcc0d07dade2}" Name="AdvViewKey" StaticName="AdvViewKey" DisplayName="Clé technique (année-utilisateur)"
+         Type="Text" MaxLength="32" Indexed="TRUE" Group="Calendrier de l'Avent" />
+  <Field ID="{9931253d-49b7-4edd-9e74-733312fb4f12}" Name="AdvViewedDays" StaticName="AdvViewedDays" DisplayName="Jours consultés (JSON)"
+         Type="Note" NumLines="6" RichText="FALSE" Group="Calendrier de l'Avent" />
+  <Field ID="{dc252548-ac2e-45b6-b7bf-2f1680189f8a}" Name="AdvViewedCount" StaticName="AdvViewedCount" DisplayName="Nombre de jours consultés"
+         Type="Number" Decimals="0" Min="0" Max="24" Group="Calendrier de l'Avent" />
+
+  <!-- ===================== Types de contenu ===================== -->
+  <ContentType ID="0x0100F3CD33B1A8864E02ADE2FD540FF8FAEE" Name="Publication de l'Avent"
+               Group="Calendrier de l'Avent" Description="Publication d'une case du calendrier de l'Avent" Inherits="TRUE" Version="0">
+    <FieldRefs>
+      <FieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" DisplayName="Titre de la publication" Required="TRUE" />
+      <FieldRef ID="{8633a4f3-2c31-41b8-a43e-bb1dcfb62097}" Name="AdvDay" />
+      <FieldRef ID="{5c5977da-421c-490e-8e16-f2af618cf84f}" Name="AdvUnlockDate" />
+      <FieldRef ID="{e7404c88-ade5-4950-8831-5768ea24d39f}" Name="AdvImage" />
+      <FieldRef ID="{686ceb85-b876-40fb-8b26-18e097fdcf7e}" Name="AdvBody" />
+      <FieldRef ID="{07ddae80-11d4-43b7-aedb-debcef3fc746}" Name="AdvLink" />
+      <FieldRef ID="{31300343-b54e-4bb6-8aad-6410ce77079a}" Name="AdvYear" />
+      <FieldRef ID="{24836c7b-4bcf-4446-a8c1-73d93cf4f5bc}" Name="AdvPublished" />
+      <FieldRef ID="{a75ab3f6-e85b-4e78-90b7-4ad3633f89f0}" Name="AdvKey" Hidden="TRUE" />
+    </FieldRefs>
+  </ContentType>
+
+  <ContentType ID="0x010017A55F55D6EF4ED0A8E8D81522F1B27B" Name="Profil de thème de l'Avent"
+               Group="Calendrier de l'Avent" Description="Profil de thème du calendrier de l'Avent" Inherits="TRUE" Version="0">
+    <FieldRefs>
+      <FieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" DisplayName="Nom du profil" Required="TRUE" />
+      <FieldRef ID="{5be2deb8-5a86-429a-8e48-cd5493c492ba}" Name="AdvIsActive" />
+      <FieldRef ID="{7b5818bc-9275-4c1c-bf78-f19a53d9f59f}" Name="AdvPrimaryColor" />
+      <FieldRef ID="{cd94395d-a266-4f91-a8c8-4211af39aed1}" Name="AdvSecondaryColor" />
+      <FieldRef ID="{4f1d7785-577d-41c4-a80e-5aa196c5571d}" Name="AdvAccentColor" />
+      <FieldRef ID="{82508ac4-2fde-4d23-ac7b-da5ebd8aa99c}" Name="AdvBackgroundColor" />
+      <FieldRef ID="{de0f5de7-3d70-4389-b06e-b94660bba9d0}" Name="AdvTextColor" />
+      <FieldRef ID="{c21504e4-0807-4ab4-8c40-6ec58c91c443}" Name="AdvLockedColor" />
+      <FieldRef ID="{026fd3f3-f178-45a9-b73a-eb8d720fb7c0}" Name="AdvFontFamily" />
+      <FieldRef ID="{b8ab86f6-3bd2-4fa9-94e7-25d3435b322f}" Name="AdvFontUrl" />
+      <FieldRef ID="{9111625a-63c9-4899-b59d-7b9bee269cf8}" Name="AdvLogo" />
+      <FieldRef ID="{41e62baa-664e-48cb-8bf9-97fddd27a2bb}" Name="AdvHeaderTitle" />
+      <FieldRef ID="{3e6365ea-f1e0-4985-8f5a-97a7d221087b}" Name="AdvBorderRadius" />
+      <FieldRef ID="{21b7b9b9-72a6-4673-8143-149d3d14db15}" Name="AdvSnowEffect" />
+      <FieldRef ID="{4b9e1c7a-2f53-4d86-a1e0-7c3d95b8f204}" Name="AdvTreeColor" />
+      <FieldRef ID="{a1d70f3e-68c2-49b5-8e17-0b5c2d94e6f1}" Name="AdvBaubleColors" />
+      <FieldRef ID="{e63b8d52-1a97-4c40-b2f8-95d1073ac6e8}" Name="AdvStarColor" />
+      <FieldRef ID="{2c84f9a0-b5d7-4e13-96a2-d8e04f7b1c35}" Name="AdvSceneBackground" />
+      <FieldRef ID="{7f20c5b9-3e8a-41d6-a7b4-1d69e2f08c53}" Name="AdvSceneStyle" />
+      <FieldRef ID="{d9a5e418-0c3f-47b2-85e6-3a7f1b9d4c20}" Name="AdvGarlandLights" />
+    </FieldRefs>
+  </ContentType>
+
+  <ContentType ID="0x0100356DF1C2065F47B1A4004162F5BE56F0" Name="Administrateur de l'Avent"
+               Group="Calendrier de l'Avent" Description="Administrateur du calendrier de l'Avent" Inherits="TRUE" Version="0">
+    <FieldRefs>
+      <FieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" DisplayName="Libellé" Required="FALSE" />
+      <FieldRef ID="{eb135daa-8d28-42c2-a19c-72602eefd0bb}" Name="AdvAdminUser" />
+    </FieldRefs>
+  </ContentType>
+
+  <ContentType ID="0x01000C21A9D3532A42DF9F0B30AD34A09130" Name="Consultation de l'Avent"
+               Group="Calendrier de l'Avent" Description="Cases du calendrier de l'Avent consultées par un utilisateur pour une édition" Inherits="TRUE" Version="0">
+    <FieldRefs>
+      <FieldRef ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" Name="Title" DisplayName="Libellé" Required="FALSE" />
+      <FieldRef ID="{31300343-b54e-4bb6-8aad-6410ce77079a}" Name="AdvYear" />
+      <FieldRef ID="{dc252548-ac2e-45b6-b7bf-2f1680189f8a}" Name="AdvViewedCount" />
+      <FieldRef ID="{9931253d-49b7-4edd-9e74-733312fb4f12}" Name="AdvViewedDays" />
+      <FieldRef ID="{f5872e0e-0cf6-447d-bc38-dcc0d07dade2}" Name="AdvViewKey" Hidden="TRUE" />
+    </FieldRefs>
+  </ContentType>
+
+  <!-- ===================== Listes ===================== -->
+  <ListInstance CustomSchema="schema-publications.xml"
+                FeatureId="00bfea71-de22-43b2-a848-c05709900100"
+                Title="Calendrier de l'Avent – Publications"
+                Description="Publications des 24 cases du calendrier de l'Avent"
+                TemplateType="100"
+                Url="Lists/AdventPublications" />
+
+  <ListInstance CustomSchema="schema-settings.xml"
+                FeatureId="00bfea71-de22-43b2-a848-c05709900100"
+                Title="Calendrier de l'Avent – Paramétrage"
+                Description="Profils de thème du calendrier de l'Avent"
+                TemplateType="100"
+                Url="Lists/AdventSettings" />
+
+  <ListInstance CustomSchema="schema-admins.xml"
+                FeatureId="00bfea71-de22-43b2-a848-c05709900100"
+                Title="Calendrier de l'Avent – Administrateurs"
+                Description="Administrateurs du calendrier de l'Avent"
+                TemplateType="100"
+                Url="Lists/AdventAdmins" />
+
+  <!-- Droits (chacun ne voit / modifie que ses éléments, visiteurs autorisés à ajouter) : posés par ProvisioningService. -->
+  <ListInstance CustomSchema="schema-views.xml"
+                FeatureId="00bfea71-de22-43b2-a848-c05709900100"
+                Title="Calendrier de l'Avent – Consultations"
+                Description="Cases ouvertes par chaque utilisateur (une ligne par utilisateur et par édition)"
+                TemplateType="100"
+                Url="Lists/AdventViews" />
+</Elements>

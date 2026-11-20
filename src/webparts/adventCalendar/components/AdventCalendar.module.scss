@@ -1,0 +1,503 @@
+// Habillage du calendrier (présentation « Grille », publication, neige, repli du sapin). Les couleurs viennent du profil de thème
+// (variables --adv-*, calculées par ThemeService.getThemeCssVariables, valeurs par défaut = modèle « Classique ») ;
+// les éléments hors profil utilisent les variables --ac-* posées par .ac-root (theme/tokens.ts, TOKENS_CSS).
+// Aucune transparence sur une couleur du thème : seules les ombres utilisent rgba (gris). Le sapin vit dans TreeScene.module.scss.
+
+.adventCalendar {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(14px, 4vw, 28px);
+  border-radius: var(--adv-radius);
+  background: var(--adv-background);
+  color: var(--adv-text);
+  font-family: var(--adv-font-family, var(--ac-font));
+  line-height: 1.45;
+  container-type: inline-size;
+}
+
+// ------------------------------------------------------------------ En-tête (présentation « Grille »)
+
+.header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+  margin-bottom: 24px;
+}
+
+.headerBrand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.headerLogo {
+  display: block;
+  width: auto;
+  max-width: min(160px, 40cqw);
+  height: 40px;
+  object-fit: contain;
+}
+
+.headerTitle {
+  margin: 0;
+  font-family: var(--adv-font-display, var(--ac-font-display));
+  font-size: var(--ac-fs-2xl);
+  font-weight: var(--ac-fw-semibold);
+  letter-spacing: -0.02em;
+  line-height: var(--ac-lh-tight);
+}
+
+.headerTagline {
+  margin: 4px 0 0;
+  color: var(--adv-text-secondary);
+  font-size: var(--ac-fs-base);
+}
+
+.progress {
+  display: flex;
+  flex: 0 1 240px;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.progressTrack {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--adv-locked);
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--adv-primary);
+  transition: width 0.6s ease;
+}
+
+.progressLabel {
+  color: var(--adv-text-secondary);
+  font-size: var(--ac-fs-sm);
+  font-weight: var(--ac-fw-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+// ------------------------------------------------------------------ Grille
+
+.grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  grid-auto-flow: dense;
+  gap: 16px;
+}
+
+.gridItem {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+}
+
+.gridItemBig {
+  grid-column: span 2;
+  grid-row: span 2;
+  min-width: 0;
+}
+
+@container (max-width: 360px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+// ------------------------------------------------------------------ Porte
+
+.doorHost {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.door {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--adv-radius);
+  background: transparent;
+  font-family: inherit;
+  color: inherit;
+  perspective: 900px;
+  container-type: inline-size;
+  cursor: pointer;
+
+  // Focus clavier toujours visible : double anneau (fond clair puis foncé), lisible sur tous les thèmes.
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ac-white), 0 0 0 6px var(--ac-text);
+  }
+}
+
+// Intérieur de la case (visible quand la porte s'ouvre) : image, ou à défaut un fond uni et une étincelle.
+.doorInside {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  border-radius: var(--adv-radius);
+  background: var(--adv-primary-tint);
+  color: var(--adv-on-tint);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.doorInsideImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.doorInsideGlyph {
+  position: absolute;
+  top: 24%;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  color: var(--adv-primary);
+
+  svg {
+    width: 26cqi;
+    height: 26cqi;
+    max-width: 40px;
+    max-height: 40px;
+  }
+}
+
+.doorInsideDay {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--adv-accent);
+  color: var(--adv-on-accent);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+// Case déjà consultée : étiquette « ✓ Consulté » (couleur « succès » + blanc).
+.doorViewed {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 6px;
+  border: 1px solid var(--ac-white);
+  border-radius: 999px;
+  background: var(--ac-success);
+  color: var(--ac-white);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+// Légende sur fond plein (pas de voile transparent sur l'image).
+.doorInsideTitle {
+  position: relative;
+  display: -webkit-box;
+  width: 100%;
+  padding: 5px 8px;
+  overflow: hidden;
+  background: var(--adv-primary);
+  color: var(--adv-on-primary);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+// Vantail : dégradé de la couleur du profil, panneau en creux et poignée dorée.
+.doorLeaf {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: var(--adv-radius);
+  background: linear-gradient(150deg, var(--adv-primary) 0%, var(--adv-primary-deep) 100%);
+  color: var(--adv-on-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 6px 14px rgba(0, 0, 0, 0.14);
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition: transform 0.8s cubic-bezier(0.3, 0.7, 0.3, 1), box-shadow 0.8s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 9%;
+    border: 1.5px solid var(--adv-primary-line);
+    border-radius: calc(var(--adv-radius) * 0.6);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12%;
+    width: 7%;
+    aspect-ratio: 1 / 1;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: var(--adv-star);
+    pointer-events: none;
+  }
+}
+
+// Petite carte : la poignée dorée ne ferait qu'un point jaune parasite à côté du numéro.
+@container (max-width: 120px) {
+  .doorLeaf::after {
+    display: none;
+  }
+}
+
+.doorAlt .doorLeaf {
+  background: linear-gradient(150deg, var(--adv-secondary) 0%, var(--adv-secondary-deep) 100%);
+  color: var(--adv-on-secondary);
+
+  &::before {
+    border-color: var(--adv-secondary-line);
+  }
+}
+
+.doorNumber {
+  font-family: var(--adv-font-display, var(--ac-font-display));
+  font-size: clamp(22px, 34cqi, 56px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.doorBig .doorNumber {
+  font-size: clamp(40px, 34cqi, 110px);
+}
+
+.doorLockIcon {
+  font-size: 16px;
+}
+
+.doorSoon {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.doorAvailable:hover .doorLeaf,
+.doorAvailable:focus-visible .doorLeaf {
+  transform: rotateY(-16deg);
+}
+
+.doorIsOpen .doorLeaf,
+.doorIsOpen:hover .doorLeaf {
+  transform: rotateY(-108deg);
+  pointer-events: none;
+}
+
+.doorOpened .doorInside {
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.18), 0 0 0 2px var(--adv-accent);
+}
+
+// Case verrouillée : couleurs « verrouillé » du profil (gris plein, sans opacité), cadenas, pas de poignée.
+.doorLocked {
+  cursor: not-allowed;
+
+  .doorLeaf {
+    background: var(--adv-locked);
+    color: var(--adv-on-locked);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+    &::before {
+      border-color: var(--adv-locked-lo);
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+// Case sans publication : contour en tirets, pas de poignée.
+.doorEmpty {
+  cursor: default;
+
+  .doorInside {
+    display: none;
+  }
+
+  .doorLeaf {
+    border: 2px dashed var(--adv-locked-lo);
+    background: transparent;
+    color: var(--adv-text-secondary);
+    box-shadow: none;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doorLeaf,
+  .progressFill {
+    transition: none;
+  }
+
+  .doorAvailable:hover .doorLeaf,
+  .doorAvailable:focus-visible .doorLeaf {
+    transform: none;
+  }
+}
+
+// ------------------------------------------------------------------ Publication (pop-up)
+
+.publication {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: var(--ac-text);
+  font-family: var(--adv-font-family, var(--ac-font));
+}
+
+.publicationImage {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  border-radius: var(--adv-radius);
+}
+
+// Bandeau généré quand la publication n'a pas d'image : numéro du jour sur le dégradé du profil, étoiles décoratives.
+.publicationHero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  min-height: 150px;
+  padding: 20px 28px;
+  overflow: hidden;
+  border-radius: var(--adv-radius);
+  background: linear-gradient(135deg, var(--adv-primary) 0%, var(--adv-primary-deep) 100%);
+  color: var(--adv-on-primary);
+}
+
+.publicationHeroArt {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.publicationHeroDay {
+  position: relative;
+  font-family: var(--adv-font-display, var(--ac-font-display));
+  font-size: 84px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+.publicationHeroMonth {
+  position: relative;
+  padding-bottom: 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+// Texte de la publication : la typographie (titres, listes, liens, citations, accordéons <details>) vient de la
+// classe globale `.ac-prose` (theme/globalStyles.ts), partagée avec l'éditeur de texte de l'administration.
+// Pleine largeur de la pop-up (760 px max) : la longueur de ligne reste confortable et s'aligne sur l'illustration.
+.publicationBody {
+  max-width: none;
+}
+
+// ------------------------------------------------------------------ Neige
+
+.snow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  container-type: size;
+  pointer-events: none;
+}
+
+.snowFlake {
+  position: absolute;
+  top: -12px;
+  border-radius: 50%;
+  background: var(--adv-snow);
+  animation-name: advSnowFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+// Gros flocons : légèrement flous, ils passent « devant ».
+.snowFlakeSoft {
+  filter: blur(0.8px);
+}
+
+@keyframes advSnowFall {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(var(--adv-drift, 0), 112cqh, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snow {
+    display: none;
+  }
+}
+
+// ------------------------------------------------------------------ Présentation « Sapin »
+
+// La scène occupe toute la surface (pas de marge) et reste affichée à toutes les largeurs : TreeScene choisit son format
+// (paysage / moyen / portrait) d'après la largeur mesurée, la grille ne la remplace jamais (c'est le choix `layout = grid`).
+.adventCalendarTree {
+  padding: 0;
+}
+
+.treeSceneWrap {
+  display: block;
+}

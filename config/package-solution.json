@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "advent-calendar-client-side-solution",
+    "title": "Advent Calendar",
+    "id": "2a830857-f417-40cc-9049-724e66160693",
+    "version": "2.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": false,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "MARZAQ Ahmed",
+      "websiteUrl": "https://marzaqconsulting.fr/",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.23.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Interactive Advent calendar (24 doors) with built-in administration, for any SharePoint intranet",
+        "fr-FR": "Calendrier de l'Avent interactif (24 cases) avec administration intégrée, pour tout intranet SharePoint"
+      },
+      "longDescription": {
+        "default": "Advent Calendar web part: 24 doors that open day after day (Christmas tree or grid layout), built-in demo content in English and French, customizable themes and a built-in administration screen. Adding the app to a site automatically creates four lists: Posts, Settings, Administrators and Visits.",
+        "fr-FR": "Web part « Calendrier de l'Avent » : 24 cases qui s'ouvrent jour après jour (présentation sapin ou grille), contenu de démonstration intégré, thèmes personnalisables et interface d'administration intégrée. L'ajout de l'application à un site crée automatiquement quatre listes : Publications, Paramétrage, Administrateurs et Consultations."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Advent Calendar – Lists",
+        "description": "Creates the four calendar lists on the site: posts (AdventPublications), settings (AdventSettings), administrators (AdventAdmins) and visits (AdventViews).",
+        "id": "a387af89-4d32-49f7-843d-808968d02057",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml"
+          ],
+          "elementFiles": [
+            "schema-publications.xml",
+            "schema-settings.xml",
+            "schema-admins.xml",
+            "schema-views.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/advent-calendar.sppkg"
+  }
+}

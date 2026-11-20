@@ -1,0 +1,604 @@
+// Présentation « Sapin » : scène en SVG (TreeArt.tsx) + 24 boules HTML (boutons) + bloc d'information.
+// Affichée à toutes les largeurs : TreeScene mesure la largeur de .scene (le web part peut être dans une colonne étroite)
+// et choisit un format (defaults/tree/treeLayout.ts, une classe format* ci-dessous) :
+//   wide   >= 1024 px : 16:9, bloc d'information à gauche (en absolu sur la scène) ;
+//   medium >= 560 px  : 5:4, bloc d'information en bandeau au-dessus du sapin ;
+//   narrow < 560 px   : portrait, bloc d'information compact au-dessus du sapin.
+// Toutes les couleurs viennent des variables --adv-* du profil (ThemeService.getThemeCssVariables) : aucune valeur en dur.
+// Seules les ombres utilisent rgba (gris). Les tailles de texte du bloc d'information suivent la largeur de la scène (cqw,
+// bornées par clamp) ; celles des boules suivent la largeur de la boule (chaque hôte est son propre conteneur).
+// .scene est un conteneur (container-type) : aucun overlay (Modal, toasts) ne doit être rendu dedans.
+
+.scene {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--adv-scene-top);
+  container-type: inline-size;
+  user-select: none;
+  isolation: isolate;
+  font-family: var(--adv-font-family, var(--ac-font));
+}
+
+// Zone du dessin : porte le ratio du format ; le SVG, les boules et la neige s'y positionnent en %.
+.stage {
+  position: relative;
+  width: 100%;
+}
+
+// Aperçu miniature (administration) : sapin seul, coins arrondis, pas de texte ni de pastilles.
+.sceneCompact {
+  border-radius: var(--ac-radius-card);
+
+  .number,
+  .halo,
+  .badge {
+    display: none;
+  }
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+// ------------------------------------------------------------------ Décor animé (sobre)
+
+.skyStar {
+  animation: advTwinkle 5s ease-in-out infinite;
+}
+
+.light {
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 0 3px var(--adv-star));
+  animation: advLight 2.6s ease-in-out infinite;
+}
+
+@keyframes advTwinkle {
+  0%,
+  100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+
+@keyframes advLight {
+  0%,
+  100% { transform: scale(0.8); }
+  50% { transform: scale(1.2); }
+}
+
+// ------------------------------------------------------------------ Bloc d'information
+
+// Base commune (formats medium et narrow : bloc en flux, au-dessus du sapin, sur le ciel du haut de la scène).
+.info {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  box-sizing: border-box;
+  color: var(--adv-scene-text);
+}
+
+.infoText {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+}
+
+// Le logo de l'entreprise repose sur une plaque blanche à bordure et ombre légères : propre sur n'importe quel décor,
+// jamais de débordement (object-fit: contain, hauteur bornée par format). Un logo à texte blanc reste un choix de l'administrateur.
+.logoPlate {
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  background: var(--ac-white);
+  border: 1px solid var(--ac-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+}
+
+.logo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--adv-font-display, var(--ac-font-display));
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.year {
+  position: relative;
+  margin: 0;
+  font-family: var(--adv-font-display, var(--ac-font-display));
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.tagline {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+}
+
+.progressTrack {
+  display: block;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--adv-scene-track);
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--adv-star-dark);
+  transition: width 0.6s ease;
+}
+
+.progressLabel {
+  font-weight: 600;
+}
+
+// ------------------------------------------------------------------ Formats
+
+// Paysage (>= 1024 px) : bloc d'information à gauche, par-dessus le ciel ; la scène a la hauteur de la zone du dessin.
+.formatWide .info {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 5.5%;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 1.1cqw;
+  width: 31%;
+
+  .infoText {
+    flex: 0 0 auto;
+    gap: 1.1cqw;
+  }
+
+  .logoPlate {
+    align-self: flex-start;
+    margin-bottom: 0.8cqw;
+    padding: clamp(4px, 0.7cqw, 10px) clamp(8px, 1.1cqw, 16px);
+    border-radius: clamp(6px, 0.8cqw, 12px);
+  }
+
+  .logo {
+    max-width: 16cqw;
+    height: clamp(24px, 3.4cqw, 44px);
+  }
+
+  .title {
+    font-size: clamp(13px, 1.9cqw, 24px);
+  }
+
+  .year {
+    padding-bottom: 1.5cqw;
+    font-size: clamp(40px, 9cqw, 130px);
+
+    &::after {
+      width: 4.5cqw;
+      height: 0.5cqw;
+    }
+  }
+
+  .tagline {
+    font-size: clamp(12px, 1.8cqw, 22px);
+  }
+
+  .progress {
+    gap: 0.7cqw;
+    max-width: 22cqw;
+    margin-top: 1cqw;
+  }
+
+  .progressTrack {
+    height: max(5px, 0.55cqw);
+  }
+
+  .progressLabel {
+    font-size: clamp(11px, 1.35cqw, 16px);
+  }
+}
+
+// Moyen (560 à 1023 px, tablette) : bandeau au-dessus du sapin, qui occupe toute la largeur.
+.formatMedium .info {
+  padding: clamp(16px, 3cqw, 28px) clamp(18px, 4.5cqw, 44px) 0;
+
+  .logoPlate {
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
+
+  .logo {
+    max-width: min(26cqw, 180px);
+    height: clamp(26px, 4.4cqw, 40px);
+  }
+
+  .infoText {
+    flex-basis: 220px;
+  }
+
+  .title {
+    font-size: clamp(15px, 2.4cqw, 22px);
+  }
+
+  .year {
+    padding-bottom: 8px;
+    font-size: clamp(36px, 6.4cqw, 64px);
+
+    &::after {
+      width: 36px;
+      height: 4px;
+    }
+  }
+
+  .tagline {
+    margin-top: 2px;
+    font-size: clamp(12px, 1.9cqw, 16px);
+  }
+
+  .progress {
+    flex: 0 1 220px;
+    gap: 6px;
+  }
+
+  .progressTrack {
+    height: 6px;
+  }
+
+  .progressLabel {
+    font-size: clamp(12px, 1.9cqw, 15px);
+  }
+}
+
+// Étroit (< 560 px, téléphone) : en-tête compact (logo, titre, année, progression) au-dessus d'un sapin portrait.
+.formatNarrow .info {
+  gap: 10px 14px;
+  padding: 14px 16px 0;
+
+  .logoPlate {
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .logo {
+    max-width: min(34cqw, 140px);
+    height: 28px;
+  }
+
+  .infoText {
+    flex-basis: 120px;
+  }
+
+  .title {
+    font-size: clamp(14px, 4.2cqw, 18px);
+  }
+
+  .year {
+    padding-bottom: 7px;
+    font-size: clamp(32px, 11cqw, 48px);
+
+    &::after {
+      width: 28px;
+      height: 3px;
+    }
+  }
+
+  // Les vœux sont décoratifs : retirés en petit format pour garder un en-tête compact.
+  .tagline {
+    display: none;
+  }
+
+  .progress {
+    flex: 1 0 100%;
+    gap: 5px;
+  }
+
+  .progressTrack {
+    height: 6px;
+  }
+
+  .progressLabel {
+    font-size: clamp(12px, 3.4cqw, 14px);
+  }
+}
+
+// Pastilles (cadenas, ✓) serrées contre la boule : elles ne mordent pas sur les boules voisines
+// (étroit : 6 unités d'écart seulement ; moyen : 10).
+.formatNarrow .badge {
+  right: -2%;
+  bottom: -2%;
+  width: 34%;
+  border-width: 1.5px;
+}
+
+.formatMedium .badge {
+  right: -5%;
+  bottom: -3%;
+}
+
+// ------------------------------------------------------------------ Boules
+
+.baubles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.snowLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.baubleHost {
+  position: absolute;
+  container-type: inline-size;
+}
+
+// Zone cliquable : crochet (15 % de la largeur) + corps rond. Accrochée par le haut : elle se balance autour du crochet.
+.bauble {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1.15;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  transform-origin: 50% 0;
+  transition: transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  // Focus clavier : double anneau blanc + foncé, visible sur le feuillage comme sur le ciel.
+  &:focus-visible {
+    outline: none;
+
+    .ball {
+      box-shadow: 0 0 0 3px var(--ac-white), 0 0 0 6px var(--ac-text);
+    }
+  }
+}
+
+.cap {
+  position: absolute;
+  top: 4%;
+  left: 50%;
+  width: 24%;
+  height: 11%;
+  transform: translateX(-50%);
+  border-radius: 2px 2px 1px 1px;
+  background: var(--adv-star);
+  box-shadow: inset 0 -2px 0 var(--adv-star-dark);
+  pointer-events: none;
+
+  // Œillet du crochet.
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 60%;
+    height: 90%;
+    transform: translateX(-50%);
+    border: 2px solid var(--adv-star-dark);
+    border-bottom: 0;
+    border-radius: 50% 50% 0 0;
+  }
+}
+
+.ball {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 28%, var(--b-hi) 0%, var(--b) 52%, var(--b-lo) 100%);
+  box-shadow: 0 6cqw 10cqw rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+
+  // Reflet.
+  &::after {
+    content: '';
+    position: absolute;
+    top: 13%;
+    left: 20%;
+    width: 28%;
+    height: 16%;
+    transform: rotate(-32deg);
+    border-radius: 50%;
+    background: var(--b-hi);
+  }
+}
+
+// Numéro : couleur calculée (textOn) pour contraster avec la boule.
+.number {
+  position: relative;
+  z-index: 1;
+  transform: translateY(5%);
+  color: var(--b-on);
+  font-family: var(--adv-font-display, var(--ac-font-display));
+  font-size: 42cqw;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.badge {
+  position: absolute;
+  right: -8%;
+  bottom: -4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--ac-white);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+
+  svg {
+    width: 60%;
+    height: 60%;
+  }
+}
+
+// « Déjà consulté » : couleur « succès » + blanc.
+.badgeViewed {
+  background: var(--ac-success);
+  color: var(--ac-white);
+}
+
+// Cadenas discret des cases verrouillées.
+.badgeLocked {
+  background: var(--ac-white);
+  color: var(--ac-text-muted);
+}
+
+// Disponible : un anneau doré qui s'élargit lentement invite au clic (décalé d'une boule à l'autre).
+.halo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--adv-star);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: advHalo 3.4s ease-out infinite;
+}
+
+@keyframes advHalo {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+
+  65%,
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.baubleAvailable:hover,
+.baubleOpened:hover,
+.baubleAvailable:focus-visible,
+.baubleOpened:focus-visible {
+  transform: rotate(-6deg) scale(1.07);
+}
+
+// Ouverture : la boule se balance, s'illumine et lâche un éclat avant l'affichage de la publication.
+.baubleOpening {
+  animation: advBaubleSwing 0.8s ease-in-out;
+}
+
+.burst {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  aspect-ratio: 1 / 1;
+  border: 3px solid var(--adv-star-light);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: advBurst 0.8s ease-out forwards;
+}
+
+@keyframes advBaubleSwing {
+  0% { transform: rotate(0) scale(1); }
+  25% { transform: rotate(-14deg) scale(1.1); }
+  50% { transform: rotate(10deg) scale(1.16); }
+  75% { transform: rotate(-5deg) scale(1.2); filter: brightness(1.15); }
+  100% { transform: rotate(0) scale(1.22); filter: brightness(1.25); }
+}
+
+@keyframes advBurst {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.baubleLocked {
+  cursor: not-allowed;
+}
+
+// Sans publication : boule vide, contour en tirets.
+.baubleEmpty {
+  cursor: default;
+
+  .ball {
+    border: 2px dashed var(--adv-on-locked);
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skyStar,
+  .light,
+  .halo {
+    animation: none;
+  }
+
+  .bauble {
+    transition: none;
+  }
+
+  .baubleOpening,
+  .burst {
+    animation: none;
+  }
+
+  .baubleAvailable:hover,
+  .baubleOpened:hover,
+  .baubleAvailable:focus-visible,
+  .baubleOpened:focus-visible {
+    transform: none;
+  }
+
+  .progressFill {
+    transition: none;
+  }
+}

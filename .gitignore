@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules
+
+# Build generated files
+dist
+lib
+lib-dts
+lib-commonjs
+lib-esm
+jest-output
+release
+temp
+.heft
+
+# SharePoint package: only the ready-to-deploy .sppkg is versioned
+# (the debug/ folder and intermediate files stay out of the repository)
+sharepoint/solution/*
+!sharepoint/solution/advent-calendar.sppkg
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# OSX
+.DS_Store
+
+# Visual Studio files
+.ntvs_analysis.dat
+.vs
+bin
+obj
+
+# Resx Generated Code
+*.resx.ts
+
+# Styles Generated Code
+*.scss.ts
+
+# Local working documents and AI assistant notes (not part of the project)
+*.pptx
+CLAUDE.md
+.claude/
